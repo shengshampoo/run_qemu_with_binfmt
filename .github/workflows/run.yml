@@ -1,0 +1,54 @@
+name: Run
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  run:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      ### DEPENDENCIES ###
+
+      # Hard turn-off interactive mode
+      - run: echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
+
+      # Install qemu and binfmt
+      - run: sudo apt update
+      - run: sudo apt install --yes binfmt-support libpipeline1
+      
+      ### END DEPENDENCIES ###
+
+      # Checkout git repository
+      - uses: actions/checkout@v4
+            
+      # Setup KVM support
+      - name: "KVM support"
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      # Re-run with KVM support
+      - name: "Check KVM support"
+        run: |
+          cd ~/virtme-ng
+          clocksource="/sys/devices/system/clocksource/clocksource0/current_clocksource"
+          [ "$(cat "${clocksource}")" = "kvm-clock" ]
+
+      - name: Install qemu static and set docker multiarch/qemu-user-static
+        run: |
+          cd ~ 
+          curl -sL https://github.com/ziglang/qemu-static/releases/download/10.1.0/qemu-linux-x86_64-10.1.0.tar.xz | tar x --xz 
+          sudo docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+          sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-x86_64-10.1.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static arm64v8/alpine uname -m
+
+        with:
+          name: module_ko-${{ matrix.kernelbinary }}
+          path: ~/module_ko/*.tlz
