@@ -35,12 +35,6 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      # Re-run with KVM support
-      - name: "Check KVM support"
-        run: |
-          clocksource="/sys/devices/system/clocksource/clocksource0/current_clocksource"
-          [ "$(sudo cat "${clocksource}")" = "kvm-clock" ]
-
       - name: Install qemu static and set docker multiarch/qemu-user-static
         run: |
           cd ~ 
