@@ -4,7 +4,7 @@ on:
   # run it manually
   workflow_dispatch:    
   schedule:
-    - cron: "42 5 29 * *"  
+    - cron: "42 5 26 * *"  
 
 jobs:
 
