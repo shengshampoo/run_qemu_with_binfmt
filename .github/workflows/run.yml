@@ -40,9 +40,9 @@ jobs:
       - name: Install qemu static and set docker multiarch/qemu-user-static
         run: |
           cd ~ 
-          curl -sL https://github.com/ziglang/qemu-static/releases/download/10.1.0/qemu-linux-x86_64-10.1.0.tar.xz | tar x --xz 
+          curl -sL https://github.com/shengshampoo/qemu-static/releases/download/continuous/qemu-linux-x86_64-10.2.0-chimera.tar.xz | tar x --xz 
           sudo docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-          sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-x86_64-10.1.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static arm64v8/alpine uname -a
-          sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-x86_64-10.1.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static chimeralinux/chimera uname -a
-          sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-x86_64-10.1.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static bellsoft/alpaquita-linux-base:stream-musl uname -a
+          sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-x86_64-10.2.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static arm64v8/alpine uname -a
+          sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-x86_64-10.2.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static chimeralinux/chimera uname -a
+          sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-x86_64-10.2.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static bellsoft/alpaquita-linux-base:stream-musl uname -a
              
