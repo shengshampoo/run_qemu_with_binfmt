@@ -46,7 +46,7 @@ jobs:
           cd ~ 
           curl -sL https://github.com/shengshampoo/qemu-static/releases/download/continuous/qemu-linux-${{ env.uname_m }}-10.2.0-chimera.tar.xz | tar x --xz 
           sudo docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-          sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-${{ env.uname_m }}-10.2.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static arm64v8/alpine /bin/sh -c "uname -m && apk update && apk add neofetch && neofetch"
+          sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-${{ env.uname_m }}-10.2.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static arm64v8/alpine /bin/sh -c "uname -m && apk update && apk add neofetch --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community && neofetch""
           sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-${{ env.uname_m }}-10.2.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static chimeralinux/chimera uname -a
           sudo docker run -t --rm --platform=linux/arm64/v8 -v ~/qemu-linux-${{ env.uname_m }}-10.2.0/bin/qemu-aarch64:/usr/bin/qemu-aarch64-static bellsoft/alpaquita-linux-base:stream-musl uname -a
              
